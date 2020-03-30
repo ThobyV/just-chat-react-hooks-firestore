@@ -1,24 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import { Provider } from 'react-redux';
-import firebase from './Firebase/firebaseConfig';
 
 import './App.css';
 
-
-//import store from './Store/Index';
 import App from './App';
-
 
 import * as serviceWorker from './serviceWorker';
 
-
 ReactDOM.render(
-   /* <Provider store={store}>*/
-     <App/>
-    /* </Provider>*/
-    ,
-    document.getElementById('root')
+  <App />
+  ,
+  document.getElementById('root')
 )
 
 // If you want your app to work offline and load faster, you can change

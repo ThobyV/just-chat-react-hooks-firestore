@@ -78,18 +78,6 @@ a:link, a:active, a:visited, a:hover {
   padding: 1rem 0 0 0;
 }
 
-.contacts {
-  padding: 1rem;
-  margin-top: 2rem;
-}
-.contacts > ul {
-  list-style-type: none;
-}
-
-.contacts li{
-  padding: 0.8rem 0;
-}
-
 .home-header {
   padding: 2rem 0 5rem 0;
   margin: 2rem;
@@ -181,25 +169,13 @@ a:link, a:active, a:visited, a:hover {
   transition: 0s
 }
 
-.header {
-  position: absolute;  
-  top: 0;
-  padding: 0;
-  width: 100%;
-  height: 54px;
-  background-color: rgb(34, 46, 60);  
-  -webkit-box-shadow: 0 3px 3px -1px black;
-  -moz-box-shadow: 0 3px 3px -3px black;
-       box-shadow: 0 3px 3px -3px black;
-}
-
-.header-2 {
+.header-1, .header-2 {
   z-index: 1;
   position: absolute;    
   top: 0;
   padding: 0;
   width: 100%;
-  height: 50px;
+  height: 56px;
   background-color: rgb(34, 46, 60);  
   -webkit-box-shadow: 0 3px 3px -3px black;
   -moz-box-shadow: 0 3px 3px -3px black;
@@ -208,6 +184,25 @@ a:link, a:active, a:visited, a:hover {
 
 .header-2 {
   position: fixed;
+}
+
+.header-h2, .header-h3 {
+  display: inline-block;
+  float: left;
+  font-size: 0.8rem;
+  color: #FFF;
+  margin-top: 16px;
+  margin-left: 16px;
+}
+
+
+.header-h3 {
+  font-size: 0.685rem;
+  margin-left: 8px;  
+}
+
+.fix-margin{
+  margin-top: 4px;
 }
 
 .container{
@@ -222,131 +217,44 @@ a:link, a:active, a:visited, a:hover {
   overflow: hidden;
   height: 100%; 
   padding: 0;   
-  margin: 0;  
+  margin: 0;
+}
+
+.has-border-right {
   border-style: solid;
   border-width: 0 1px 0 0;
   border-right-color: rgb(28, 39, 51);
 }
 
-.m-container{
-  position: relative;
-  overflow: hidden;
-  margin: 0;
-  height: 100%; 
-  padding: 0;   
-}
-
-.fab-container {
-  height: 100%;
-  position: absolute;
-  padding: 0;   
-  margin: 0;  
-}
-
-.m-center {
-  position: absolute; 
-  left: 0;
-}
-
-.m-bottom {
-  position: absolute;
-  bottom: 0;
-}
-
-img.header-img {
-  display: inline-block;
-  padding: 8px 0 8px 16px;
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-left: 8px;  
-  margin-top: 8px;  
-  float: left;
-}
-
 p.header-char {
-  margin-left: 8px;  
+  margin-left: 16px;  
   margin-top: 8px;  
   float: left;
   display: inline-block;
   font-size: 0.845rem;
   font-weight: bold;  
-  padding: 0.25rem;  
-  width: 1.8rem;
-  height: 1.8rem;
+  padding: 0.5rem;  
+  width: 2.2rem;
+  height: 2.2rem;
   text-align: center;
   color: #FFF;
   border-radius: 50%;
 }
 
-.logout-h2 {
-  display: inline-block;
-  float: left;
-  margin-left: 8px;
-  margin-top: 16px;
-  font-size: 0.735rem;
-  font-weight: bold;
-  color: #1DA1F2;
-}
-
-.logout-btn:active {
-  text-decoration: underline;
-}
-
-h2.menu {
-  margin: 0;
-  display: inline-block;
-  text-align: left;
-  font-size: 0.9234rem;
-  color: #F3F3F3;
-} 
-
 .header-arrow {
   float: left;  
   display: inline-block;
-  margin: 8px 0 0 16px;
+  margin: 16px 0 0 16px;
 }
 
-.header-h2 {
-  display: inline-block;
-  float: left;
-  margin-left: 8px;
-  margin-top: 16px;
-  font-size: 0.8rem;
-  color: #F3F3F3;
-} 
-
-.menu {
-  display: inline-block;
-  padding: 8px 0 8px 8px;
-}
-.menu-right {
-  display: inline-block;
-  margin: 8px 16px 0 0;
-  float: right;
-}
-
-
-.menu-2 {
-  margin: 16px 0 16px 48px;
-}
-
-h2.menu-2 {
-  margin: 0;
-  display: inline;
-  text-align: left;
-  font-size: 0.8rem;
-  padding: 0 0 0 16px;
-  color: #F3F3F3;
-} 
-
-ul.chats {
+ul.chats, ul.contacts {
   position: absolute;
   list-style-type: none;
   width: 100%;
-  margin: 13% 0 0 0;
+  margin: 15% 0 0 0;
 }
 
-.chats li:hover {
+.chats li:hover, .contacts li:hover {
   background-color: rgb(40, 55, 71);
 }
 
@@ -364,7 +272,14 @@ li.li-selected b{
   font-weight: 600;
 }
 
-
+.logout-h2 > h2{
+  display: inline-block;
+  color: #2196F3;
+  margin-right: 16px;
+  margin-top: 18px;
+  font-size: 0.945rem;
+  font-weight: 500;  
+}
 
 li.clearfix:after {
   overflow: auto;  
@@ -389,19 +304,16 @@ li.clearfix:after {
   background-color: #9388E1;
 }
 
-li.pic {
-  width: 2rem;
-  height: 2rem;
-  margin: 0;
-  border-radius: 50%;
-}
-
 .clear{
   clear: both;
 }
 
 .left{
   float: left;
+}
+
+.right{
+  float: right;
 }
 
 .chat-micro-details {
@@ -420,9 +332,6 @@ li.pic {
   width: 0%;
 }
 
-.l{
-  float: left;
-}
 .r{
   float: right;
   width: inherit;
@@ -435,15 +344,6 @@ li.pic {
   width: 70%;
 }
 
-.l-1 {
-  float: left;
-  width: 5%;
-}
-
-.l-2 {
-  float: left;
-  width: 95%;
-}
 b.space {
   padding: 0 0 0 48px;    
 }
@@ -455,25 +355,21 @@ p.space {
 
 b.name {
   color:#FAF9FA;
-  font-size: 17px;
+  font-size: 1.045rem;
   font-weight: 500;
 }
 
 .message {
   color: #70828E;
-  font-size: 14px;
-  margin-top: 8px;
+  font-size: 0.995rem;
 }
 
-.right{
-  float: right;
-  width: 70%;
-}
 .badge {
   position: absolute;
   right: 50px;
   padding: 5px;
   font-size: 0.545rem;
+  font-weight: bold;
   background-color: #1DA1F2;
   width: 8px;
   height: 8px;
@@ -513,24 +409,20 @@ b.name {
   font-size: 0.545rem;
 }
 
-
-.pic {
-  width: 2rem;
-  height: 2rem;
-  background-size: cover;
-  background-position: center;
+.rounded {
+  font-size: 0.845rem;  
+  width: 2.3rem;
+  height: 2.3rem;
+  float: left;
+  text-align: center;
   border-radius: 50%;
 }
 
-.rounded {
-  font-size: 0.845rem;  
-  padding: 0.5rem;  
-  width: 2rem;
-  height: 2rem;
-  float: left;
-  text-align: center;
+.rounded > h2{
+  text-transform: uppercase;    
+  margin-top: 0.5rem;
   color: #FFF;
-  border-radius: 50%;
+  font-size: 1.145rem;  
 }
 
 .just-for-mobile {
@@ -538,15 +430,6 @@ b.name {
   height: 100%;
   position: relative;
   background-color: rgb(21, 29, 38); 
-   
-}
-
-.just-for-mobile-2 {
-  width: 100%;
-  height: 100%;
-  position: relative;  
-  background-color: rgb(21, 29, 38);  
-  overflow: hidden;  
 }
 
 .column-is-6 {
@@ -678,17 +561,6 @@ div.drop-under-bubble {
   color: rgb(187, 184, 184);
 }
 
-.r-textare {
-  width: 95%;
-  float: left;
-}
-
-.xcbc {
-  width: 44px;
-  height: 44px;
-  float: right;
-}
-
 .input-container {
   position: absolute;  
   bottom: -0.3%;
@@ -729,14 +601,14 @@ textarea {
   margin-right: 16px;
 }
 
-.load-old-messages-chats {
+.spinner-loader, .spinner-loader-old-chats {
   position: relative;
   background: transparent;
   border: 5px solid rgba(29, 161, 242, 0.2);
   border-left-color: rgb(29, 161, 242);
   border-radius: 50%;
   float: right;
-  top: 10%;
+  top: 50%;
   right: 50%;
   width:  20px;
   height: 20px;
@@ -746,21 +618,8 @@ textarea {
   animation-timing-function: linear;
 }
 
-.load-old-messages {
-  position: relative;
-  background: transparent;
-  border: 5px solid rgba(29, 161, 242, 0.2);
-  border-left-color: rgb(29, 161, 242);
-  border-radius: 50%;
-  float: right;
+.spinner-loader-old-chats {
   top: 0%;
-  right: 50%;
-  width:  20px;
-  height: 20px;
-  animation-name: rotate-loader;
-  animation-iteration-count: infinite;
-  animation-duration: 1s;
-  animation-timing-function: linear;
 }
 
 @keyframes rotate-loader {
@@ -812,7 +671,6 @@ textarea {
   position: fixed;
 }
 
-
 .fab {
   position: absolute;
   bottom: 0;
@@ -834,6 +692,28 @@ textarea {
 
 @media screen and (max-width: 599px) {
 
+  b.space {
+    padding: 0 0 0 64px;    
+  }
+  
+  p.space {
+    padding: 0 0 0 64px;
+  }
+  
+  b.name {
+    font-size: 1.045rem;
+    font-weight: 600;
+  }
+
+.rounded {
+  width: 56px;
+  height: 56px;
+}
+
+.rounded > h2{
+  font-size: 1.45rem;
+}
+
 .home-header {
   border-style: none;
   margin: 0;
@@ -841,30 +721,6 @@ textarea {
 .home-header p {
   margin: 0 1rem;  
 }
-
-  p.header-char {
-    font-size: 1.454rem;  
-    width: 1.8rem;
-    height: 1.8rem;
-    text-align: center;
-  }
-
-  .header-2 {
-    height: 56px;
-  }
-
-  .header-arrow {
-    margin: 16px 0 0 16px;
-  }
-  
-  .header-h2 {
-    display: inline-block;
-    float: left;
-    margin-left: 8px;
-    margin-top: 16px;
-    font-size: 0.935rem;
-    color: #F3F3F3;
-  } 
 
   textarea {    
    font-size: 1.05rem;

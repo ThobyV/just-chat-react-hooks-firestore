@@ -1,7 +1,6 @@
 ## :smiley_cat: JustChat - A Real-Time messaging web application bauilt using React Hooks API and Firestore Database SDKs. 
 
-> Warning! This project should not in any way be used in Production because there are many reasons > why it just does not fit. Especially if you do not want google billing you colossally for using a > wierd and non-business friendly project you found on Github. Firebase is much better for realtime > applications and I just used Firestore;s support for this feature anyway. 
-
+> Warning! Please try not to use this Project in Production. Apart from being buggy, not too optimized.. Firestore database billing structure does not really fit an app like this. Its adviceable to Use Firebase Database instead for serious real time apps as it has best support (billing/API) for this. This is mostly experimental just to cruise Firestore's real time features. Thanks!
 
 #### :smiley_cat: Current Features
 

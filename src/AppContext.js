@@ -50,19 +50,19 @@ const updateConvTypingState = (payload, conversations_typingStates) => {
 }
 
 const setMessage = (new_messages, arr) => {
-    let findByUID = (conv) => conv.conversation_uid == new_messages[0].channel_id;
+    let findByUID = (conv) => conv.conversation_uid === new_messages[0].channel_id;
     let copiedArr = [...arr];
     let prevConv = copiedArr.find(findByUID);
     let prevConvIndex = copiedArr.findIndex(findByUID);
     let newConv = { ...prevConv, messages: [...prevConv.messages, ...new_messages] }
-    let removeDuplicate = copiedArr.splice(prevConvIndex, 1)
+    copiedArr.splice(prevConvIndex, 1); //remove duplicate values
     let newArr = [newConv, ...copiedArr]
     return newArr;
 }
 
 const setPaginatedMessages = (new_messages, arr) => {
     let updatedconvArray = arr.map(conv => {
-        if (conv.conversation_uid == new_messages[0].channel_id) {
+        if (conv.conversation_uid === new_messages[0].channel_id) {
             return {
                 ...conv,
                 messages: [...new_messages, ...conv.messages]
@@ -185,7 +185,7 @@ const ChatProvider = ({ children }) => {
             if (authUser.uid) {
                 try {
                     let counter = 0;
-                    const conversationListener = await chatsCollection
+                    await chatsCollection
                         .where("conversation_participants_uid", "array-contains", `${auth_user_uid}`)
                         .onSnapshot(querySnapshot => {
                             counter++;
@@ -321,7 +321,7 @@ const AuthProvider = ({ children }) => {
                 const { displayName, uid } = currentUser;
                 const authUserFx = async () => {
                     try {
-                        const result = await addUserToUsersCollection({ displayName, uid, placeholderColor: randomColor })
+                        await addUserToUsersCollection({ displayName, uid, placeholderColor: randomColor })
                         setLoading(false);
                         setAuthUser({ displayName, uid, placeholderColor: randomColor });
                     } catch (error) {

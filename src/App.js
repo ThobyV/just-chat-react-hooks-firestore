@@ -132,7 +132,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
               }} />
             )
         ) : (
-            <div className="load-old-messages-chats"></div>
+            <div className="spinner-loader"></div>
           )
       }
     />
@@ -167,7 +167,7 @@ const SignIn = withRouter(({ location, history }) => {
   if (loading) return (
     <div className="home">
       <div className="just-for-mobile">
-        <div className="load-old-messages-chats"></div>
+        <div className="spinner-loader"></div>
       </div>
     </div>)
 
@@ -184,7 +184,7 @@ const SignIn = withRouter(({ location, history }) => {
           <button onClick={() => authUserByRedirect()}>Sign-in With Google</button>
         </div>
         <div className="link is-centered">
-          <a href="https://github.com/ThobyV/just-chat-react-hooks-firestore/blob/master/src/App.js">Github</a> | <a href="https://twitter.com/thoby_vic">Twitter</a>
+          <a href="https://github.com/ThobyV/just-chat-react-hooks-firestore">Github</a> | <a href="https://twitter.com/thoby_vic">Twitter</a>
         </div>
       </div>
     </div>
@@ -242,14 +242,14 @@ const LcComponent = React.memo(function ({ match, authUser, conversations, dispa
   }
 
   return (
-    <div className="c-container">
+    <div className="c-container has-border-right">
       <div className="just-for-mobile">
-        <div className="header">
-          <div className="menu"><h2 className="menu">Messages</h2></div>
-          <div className="menu-right"><h2 className="logout-h2" onClick={() => firebase.auth().signOut()}>Logout</h2></div>
+        <div className="header-1">
+          <div className="header-h2 has-border-right"><h2>Messages</h2></div>
+          <div className="logout-h2 right"><h2 onClick={() => firebase.auth().signOut()}>Logout</h2></div>
         </div>
 
-        {loading && <div className="load-old-messages-chats"></div>}
+        {loading && <div className="spinner-loader"></div>}
         {!loading &&
           (<ul className="chats">
             {
@@ -273,7 +273,9 @@ const LcComponent = React.memo(function ({ match, authUser, conversations, dispa
                         }
                       }>
                         <div className="img-left">
-                          <h2 className={`rounded ${contactDetails.placeholderColor}`}>{contactDetails.name.charAt(0)} </h2>
+                          <div className={`rounded ${contactDetails.placeholderColor}`}>
+                            <h2>{contactDetails.name.charAt(0)} </h2>
+                          </div>
                         </div>
 
                         <div className="left chat-micro-details">
@@ -283,7 +285,7 @@ const LcComponent = React.memo(function ({ match, authUser, conversations, dispa
                           </div>
 
                           <div className="clear block">
-                            <p className="l message space">{trimString(lastMessage.message_text, 25)}</p>
+                            <p className="left message space">{trimString(lastMessage.message_text, 25)}</p>
                             <div className="r read">
                               {
                                 MessageReadReciepts()
@@ -509,7 +511,7 @@ const SetConversation = ({ match, location }) => {
 
   return loading ?
     <div className="just-for-mobile">
-      <div className="load-old-messages-chats"></div>
+      <div className="spinner-loader"></div>
     </div>
     :
     <ChatComponent
@@ -561,7 +563,6 @@ const ContactMessage = ({ chat, contact_details }) => {
   );
 }
 
-//TODo read ref defaults and timing/req
 const ChatComponent = withRouter(function ({ history, cuid_data, contact_details, auth_user, findContactDetails, new_conversation }) {
   const [state, dispatch] = useChatState();
   const [paginate, setPaginate] = useState(false);
@@ -633,15 +634,15 @@ const ChatComponent = withRouter(function ({ history, cuid_data, contact_details
 
   let onScrollhandler = () => {
     if (scrolledToBottom() && btnOn.current) {
-      toggleScrollBtnOff()
-      hideUnreadBtn()
+      toggleScrollBtnOff();
+      hideUnreadBtn();
       btnOn.current = false;
-      console.log('mad ohh')
+      console.log('fired start');
     }
     if (!scrolledToBottom() && !btnOn.current) {
-      toggleScrollBtnOn()
+      toggleScrollBtnOn();
       btnOn.current = true;
-      console.log('mad o')
+      console.log('fired end');
     }
     if (scrolledToTop() && !loadMoreBool.current.loading) {
       showloadingEl();
@@ -666,7 +667,7 @@ const ChatComponent = withRouter(function ({ history, cuid_data, contact_details
   const scrollDownOnEnterOrClick = (hasKey(conversation, "messages")) ? getScrollByEnteredMessageVal() : null;
 
   const MapChatsAndMarkers = (contact_details) => messages.map((data, index, array) => {
-    if (index == 0) {
+    if (index === 0) {
       let chat = { ...data, date: getDate(data.createdAt), time: getTime(data.createdAt), }
       if (chat.sender_uid === auth_user.uid) {
         return <UserMessage chat={chat} />
@@ -688,7 +689,6 @@ const ChatComponent = withRouter(function ({ history, cuid_data, contact_details
         return <UserMessage chat={chat} />
       }
       return <ContactMessage chat={chat} contact_details={contact_details} />
-
     }
   })
 
@@ -761,31 +761,31 @@ const ChatComponent = withRouter(function ({ history, cuid_data, contact_details
   }, [messages]);
 
   return (
-    <div className="m-container">
-      <div className="just-for-mobile-2">
+    <div className="c-container">
+      <div className="just-for-mobile">
         <div className="header-2" onClick={() => history.goBack()}>
           <div className="header-arrow">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#FFF" viewBox="0 0 18 18"><path d="M15 8.25H5.87l4.19-4.19L9 3 3 9l6 6 1.06-1.06-4.19-4.19H15v-1.5z" /></svg>
           </div>
           {contact_details ?
-            <>
+            <div className="fix-margin">
               <p className={`header-char ${contact_details.placeholderColor}`}>{contact_details.name.charAt(0)} </p>
-              <h2 className="header-h2">{contact_details.name}</h2>
-            </>
+              <div className="header-h3"><h2>{contact_details.name}</h2></div>
+            </div>
             : getLength(conversation) &&
-            <>
+            <div className="fix-margin">
               <p className={`header-char ${auth_user.placeholderColor}`}>{findContactDetails(conversation.conversation_participants_details, auth_user.uid).name.charAt(0)} </p>
-              <h2 className="header-h2">{findContactDetails(conversation.conversation_participants_details, auth_user.uid).name}</h2>
-            </>
+              <div className="header-h3"><h2>{findContactDetails(conversation.conversation_participants_details, auth_user.uid).name}</h2></div>
+            </div>
           }
         </div>
 
         <ul ref={ulEl} onScroll={onScrollhandler} className="bubbledad">
 
-          {<div ref={loadingEl} className="load-old-messages"></div>}
+          {<div ref={loadingEl} className="spinner-loader-old-chats"></div>}
           {
             hasKey(conversation, "first_message") &&
-            (conversation.first_sender_uid == auth_user.uid) &&
+            (conversation.first_sender_uid === auth_user.uid) &&
             <li className="me-bubble" key={'first_message'}>
               <div className="me-msg">
                 <p>{conversation.first_message}</p>
@@ -994,19 +994,19 @@ const ContactsList = ({ history, match }) => {
   useConsole(contactsList);
 
   return (
-    <div className="c-container just-for-mobile">
-      <div className="header-2" onClick={() => history.goBack()}>
-        <div className="header-arrow">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#FFF" viewBox="0 0 18 18"><path d="M15 8.25H5.87l4.19-4.19L9 3 3 9l6 6 1.06-1.06-4.19-4.19H15v-1.5z" /></svg>
+    <div className="c-container">
+      <div className="just-for-mobile">
+        <div className="header-2" onClick={() => history.goBack()}>
+          <div className="header-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#FFF" viewBox="0 0 18 18"><path d="M15 8.25H5.87l4.19-4.19L9 3 3 9l6 6 1.06-1.06-4.19-4.19H15v-1.5z" /></svg>
+          </div>
+          <div className="header-h2"><h2>Contacts</h2></div>
         </div>
-        <h2 className="header-h2">Contacts</h2>
-      </div>
-      <div className="contacts">
         {
-          loading ? <div className="load-old-messages-chats"></div>
+          loading ? <div className="spinner-loader"></div>
             :
             contactsList.length ? contactsList.map(contact =>
-              <ul>
+              <ul className="contacts">
                 <li key={contact.uid}>
                   <Link to={
                     {
@@ -1019,7 +1019,9 @@ const ContactsList = ({ history, match }) => {
                     }
                   }>
                     <div className="img-left">
-                      <h2 className={`rounded ${contact.placeholderColor}`}>{contact.name || contact.displayName.charAt(0)} </h2>
+                      <div className={`rounded ${contact.placeholderColor}`}>
+                        <h2>{contact.name || contact.displayName.charAt(0)} </h2>
+                      </div>
                     </div>
                     <b className="name space">{contact.name || contact.displayName}</b>
                   </Link>
