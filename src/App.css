@@ -247,18 +247,29 @@ p.header-char {
   margin: 16px 0 0 16px;
 }
 
-ul.chats, ul.contacts {
+ul.contacts {
+  list-style-type: none;
+  width: 100%;
+  margin: 8% 0 0 0;
+}
+
+.contacts li{
+  padding: 8px 16px 24px 16px;
+  margin-bottom: 0.5rem;
+}
+
+ul.chats {
   position: absolute;
   list-style-type: none;
   width: 100%;
   margin: 15% 0 0 0;
 }
 
-.chats li:hover, .contacts li:hover {
+.chats li:hover{
   background-color: rgb(40, 55, 71);
 }
 
-.chats li {
+.chats li{
   padding: 16px 16px 24px 16px;
 }
 
@@ -691,6 +702,15 @@ textarea {
 }
 
 @media screen and (max-width: 599px) {
+
+  ul.contacts {
+    margin: 15% 0 0 0;
+  }
+  
+  .contacts li{
+    padding: 16px 16px 24px 16px;
+    margin-bottom: 0.5rem;
+  }
 
   b.space {
     padding: 0 0 0 64px;    

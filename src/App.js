@@ -1005,28 +1005,32 @@ const ContactsList = ({ history, match }) => {
         {
           loading ? <div className="spinner-loader"></div>
             :
-            contactsList.length ? contactsList.map(contact =>
+            contactsList.length ?
               <ul className="contacts">
-                <li key={contact.uid}>
-                  <Link to={
-                    {
-                      pathname: `conversations/contactbased`,
-                      contact_details: {
-                        name: contact.name || contact.displayName,
-                        uid: contact.uid,
-                        placeholderColor: contact.placeholderColor,
-                      },
-                    }
-                  }>
-                    <div className="img-left">
-                      <div className={`rounded ${contact.placeholderColor}`}>
-                        <h2>{contact.name || contact.displayName.charAt(0)} </h2>
-                      </div>
-                    </div>
-                    <b className="name space">{contact.name || contact.displayName}</b>
-                  </Link>
-                </li>
-              </ul>)
+                {
+                  contactsList.map(contact =>
+                    <li key={contact.uid}>
+                      <Link to={
+                        {
+                          pathname: `conversations/contactbased`,
+                          contact_details: {
+                            name: contact.name || contact.displayName,
+                            uid: contact.uid,
+                            placeholderColor: contact.placeholderColor,
+                          },
+                        }
+                      }>
+                        <div className="img-left">
+                          <div className={`rounded ${contact.placeholderColor}`}>
+                            <h2>{contact.name || contact.displayName.charAt(0)} </h2>
+                          </div>
+                        </div>
+                        <b className="name space">{contact.name || contact.displayName}</b>
+                      </Link>
+                    </li>
+                  )
+                }
+              </ul>
               :
               <b>You have no contacts</b>
         }
