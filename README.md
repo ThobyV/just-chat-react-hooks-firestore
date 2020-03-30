@@ -1,24 +1,22 @@
-#HookChat
+##:smiley_cat: JustChat - A Real-Time messaging web application bauilt using React Hooks API and Firestore Database SDKs. 
+
+> Warning! This project should not in any way be used in Production because there are many reasons > why it just does not fit. Especially if you do not want google billing you colossally for using a > wierd and non-business friendly project you found on Github. Firebase is much better for realtime > applications and I just used Firestore;s support for this feature anyway. 
 
 
-## Just another boring sideproject based on React Hooks API and Firestore Database SDKs. 
+####:smiley_cat: Current Features
 
-Warning! This project should not in any way be used in Production because there are many reasons why it just does not fit. Especially if you do not want google billing you colossally for using a wierd and non-business friendly project you found on Github. Firebase is much better for realtime applications and I just used Firestore;s support for this feature anyway. 
+* Real Time One-to-one Messaging
+* Typing Indicators
+* Read Reciepts
+* Url based chat loading
+* Chats History
 
+####:pray: Hot community contribution features idea
 
-### Features
-
-# Real Time One-to-one Messaging
-# Typing Indicators
-# Read Reciepts
-# Url based chat loading
-
-## Hot community contribution features idea
-
-# Theme Support
-# Emoji support
-# Media / Files support
-# Move Firestore functions outside React Code 
+* Theme Support
+* Emoji support
+* Media / Files support
+* Move Firestore functions outside React Code 
 
 
 ### `npm start`

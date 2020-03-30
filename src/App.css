@@ -80,13 +80,14 @@ a:link, a:active, a:visited, a:hover {
 
 .contacts {
   padding: 1rem;
+  margin-top: 2rem;
 }
 .contacts > ul {
   list-style-type: none;
 }
 
 .contacts li{
-  padding: 1rem 0;
+  padding: 0.8rem 0;
 }
 
 .home-header {
@@ -185,6 +186,7 @@ a:link, a:active, a:visited, a:hover {
   top: 0;
   padding: 0;
   width: 100%;
+  height: 54px;
   background-color: rgb(34, 46, 60);  
   -webkit-box-shadow: 0 3px 3px -1px black;
   -moz-box-shadow: 0 3px 3px -3px black;
@@ -276,17 +278,17 @@ p.header-char {
   border-radius: 50%;
 }
 
-.logout-btn {
-  background-color: transparent;
-  color: #1DA1F2;
+.logout-h2 {
+  display: inline-block;
+  float: left;
+  margin-left: 8px;
+  margin-top: 16px;
+  font-size: 0.735rem;
   font-weight: bold;
-  border-style: none;
-  text-align: center;
-  padding: 0.5rem;
-  outline: none;
+  color: #1DA1F2;
 }
 
-.logout-btn button:active {
+.logout-btn:active {
   text-decoration: underline;
 }
 
@@ -294,7 +296,7 @@ h2.menu {
   margin: 0;
   display: inline-block;
   text-align: left;
-  font-size: 0.8rem;
+  font-size: 0.9234rem;
   color: #F3F3F3;
 } 
 
@@ -341,7 +343,7 @@ ul.chats {
   position: absolute;
   list-style-type: none;
   width: 100%;
-  margin: 20% 0 0 0;
+  margin: 13% 0 0 0;
 }
 
 .chats li:hover {
@@ -354,6 +356,8 @@ ul.chats {
 
 li.li-selected {
   background-color: #1C2733;
+  margin: 0.25rem 0.5rem 0 0.5rem;
+  border-radius: 10px;
 }
 
 li.li-selected b{
@@ -451,7 +455,7 @@ p.space {
 
 b.name {
   color:#FAF9FA;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
 }
 
@@ -814,9 +818,9 @@ textarea {
   bottom: 0;
   right: 2%;
   background-color: #1DA1F2;
-  padding: 0.5rem;
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
   border-radius: 50%;
   text-align: center;
   color: white;
@@ -824,6 +828,9 @@ textarea {
   box-shadow: 1px 5px 18px rgba(0, 0, 0, 0.4)
 }
 
+.fab>svg{
+  margin-top: 8px;
+}
 
 @media screen and (max-width: 599px) {
 

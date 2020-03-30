@@ -20,8 +20,6 @@ import pager_emoji_svg from './pager_emoji_svg.svg'
 import cat_emoji_svg from './cat_emoji_svg.svg'
 import message_emoji_svg from './message_emoji_svg.svg'
 
-
-
 function trimString(str, max_length) {
   var str_len = str.length;
   if (str_len > max_length) {
@@ -33,19 +31,19 @@ function trimString(str, max_length) {
 }
 
 function getDate(timestamp) {
-  let date = new Date(timestamp);
-  let options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+  var date = new Date(timestamp);
+  var options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
   return date.toLocaleDateString(undefined, options);
 }
 
 function getTime(timestamp) {
-  let date = new Date(timestamp);
-  let options = { hour: '2-digit', minute: '2-digit', hour12: true };
+  var date = new Date(timestamp);
+  var options = { hour: '2-digit', minute: '2-digit', hour12: true };
   return date.toLocaleTimeString(undefined, options);
 }
 
 //instead of using undefined checkers we can just check  for  undefined?
-let getLength = (obj) => {
+function getLength(obj) {
   if (obj !== undefined || null) {
     return Object.keys(obj).length
   }
@@ -53,7 +51,7 @@ let getLength = (obj) => {
 
 function hasKey(obj, key) {
   if (obj !== undefined || null) {
-    var keys = Object.keys(obj);
+    let keys = Object.keys(obj);
     if (keys.includes(key)) {
       return true
     } else {
@@ -116,6 +114,30 @@ const Routes = () => (
   </Router>
 )
 
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const [authUser, initializing] = useAuthState();
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        !initializing ? (
+          authUser.uid ? (
+            <Component {...props} />
+          ) : (
+              <Redirect to={{
+                pathname: "/",
+                state: {
+                  from: props.location,
+                }
+              }} />
+            )
+        ) : (
+            <div className="load-old-messages-chats"></div>
+          )
+      }
+    />
+  );
+}
 
 const SignIn = withRouter(({ location, history }) => {
   const [authUser, loading, setLoading] = useAuthState();
@@ -143,8 +165,10 @@ const SignIn = withRouter(({ location, history }) => {
   }, [authUser]);
 
   if (loading) return (
-    <div className="home just-for-mobile">
-      <div className="load-old-messages-chats"></div>
+    <div className="home">
+      <div className="just-for-mobile">
+        <div className="load-old-messages-chats"></div>
+      </div>
     </div>)
 
   if (!loading) return (
@@ -160,37 +184,12 @@ const SignIn = withRouter(({ location, history }) => {
           <button onClick={() => authUserByRedirect()}>Sign-in With Google</button>
         </div>
         <div className="link is-centered">
-          <a>Github</a> | <a>Twitter</a>
+          <a href="https://github.com/ThobyV/just-chat-react-hooks-firestore/blob/master/src/App.js">Github</a> | <a href="https://twitter.com/thoby_vic">Twitter</a>
         </div>
       </div>
     </div>
   )
 });
-
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  const [authUser, initializing] = useAuthState();
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        !initializing ? (
-          authUser.uid ? (
-            <Component {...props} />
-          ) : (
-              <Redirect to={{
-                pathname: "/",
-                state: {
-                  from: props.location,
-                }
-              }} />
-            )
-        ) : (
-            <div className="load-old-messages-chats"></div>
-          )
-      }
-    />
-  );
-}
 
 const ReadReciepts = ({ message_read }) => {
   if (message_read) {
@@ -247,7 +246,7 @@ const LcComponent = React.memo(function ({ match, authUser, conversations, dispa
       <div className="just-for-mobile">
         <div className="header">
           <div className="menu"><h2 className="menu">Messages</h2></div>
-          <div className="menu-right"><button className="menu logout-btn" onClick={() => firebase.auth().signOut()}>Logout</button></div>
+          <div className="menu-right"><h2 className="logout-h2" onClick={() => firebase.auth().signOut()}>Logout</h2></div>
         </div>
 
         {loading && <div className="load-old-messages-chats"></div>}
@@ -291,7 +290,6 @@ const LcComponent = React.memo(function ({ match, authUser, conversations, dispa
                               }
                             </div>
                           </div>
-
                         </div>
                       </Link>
                       {
@@ -314,16 +312,19 @@ const LcComponent = React.memo(function ({ match, authUser, conversations, dispa
                   <img src={cat_emoji_svg} alt="Weary cat Emoji" />
                   <p> seems you have no conversations yet</p>
                   <div className="is-centered">
-                    <a>Start a conversation now</a>
+                    <Link to={`${match.path}/find_contacts`}>
+                      <a>Start a conversation now</a>
+                    </Link>
                   </div>
                 </div>
             }
           </ul>)
         }
-
       </div>
       <Link to={`${match.path}/find_contacts`}>
-        <div className="fab"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#FFFFFF" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" /></svg></div>
+        <div className="fab">
+          <svg xmlns="http://www.w3.org/2000/svg" align="cennter" width="28" height="28" fill="#FFFFFF" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" /></svg>
+        </div>
       </Link>
     </div>
   );
@@ -507,7 +508,9 @@ const SetConversation = ({ match, location }) => {
   }, [state.initialized, cuid_identifier]);
 
   return loading ?
-    <div className="load-old-messages-chats"></div>
+    <div className="just-for-mobile">
+      <div className="load-old-messages-chats"></div>
+    </div>
     :
     <ChatComponent
       cuid_data={cuidData}
@@ -565,70 +568,70 @@ const ChatComponent = withRouter(function ({ history, cuid_data, contact_details
 
   let ulEl = useRef(null);
   let scrollBtnEl = useRef(null);
-  var loadingEl = useRef(null);
-  var loadMoreBool = useRef({ loading: false, canLoad: false, paginate: false });
-  var newMsgEl = useRef(false);
-  var btnOn = useRef(false);
+  let loadingEl = useRef(null);
+  let loadMoreBool = useRef({ loading: false, canLoad: false, paginate: false });
+  let newMsgEl = useRef(false);
+  let btnOn = useRef(false);
 
-  const showUnreadBtn = (unread_count) => {
+  let showUnreadBtn = (unread_count) => {
     newMsgEl.current.textContent = `${unread_count}`;
     newMsgEl.current.style.visibility = 'visible';
   }
 
-  const hideUnreadBtn = () => {
+  let hideUnreadBtn = () => {
     newMsgEl.current.textContent = ``;
     newMsgEl.current.style.visibility = 'hidden';
   }
 
-  const toggleScrollBtnOff = () => {
+  let toggleScrollBtnOff = () => {
     scrollBtnEl.current.style.visibility = "hidden";
   }
 
-  const toggleScrollBtnOn = (unread_count) => {
+  let toggleScrollBtnOn = (unread_count) => {
     scrollBtnEl.current.style.visibility = "visible";
   }
 
-  const scrollUlToBottom = () => {
+  let scrollUlToBottom = () => {
     ulEl.current.scrollTop = ulEl.current.scrollHeight - (ulEl.current.clientHeight);
   }
 
-  const scrolledToTop = () => {
-    var ulElmnt = ulEl.current;
+  let scrolledToTop = () => {
+    let ulElmnt = ulEl.current;
     return (ulElmnt.scrollTop === 0);
   }
 
-  const scrolledToBottom = () => {
-    var ulElmnt = ulEl.current;
-    var ulElScrolledToBottomVal = ulElmnt.scrollHeight - ulElmnt.clientHeight;
-    return ulElmnt.scrollTop == ulElScrolledToBottomVal;
+  let scrolledToBottom = () => {
+    let ulElmnt = ulEl.current;
+    let ulElScrolledToBottomVal = ulElmnt.scrollHeight - ulElmnt.clientHeight;
+    return ulElmnt.scrollTop === ulElScrolledToBottomVal;
   }
 
-  const scrollAction = () => {
+  let scrollAction = () => {
     hideUnreadBtn();
     toggleScrollBtnOff();
     scrollUlToBottom();
   }
 
-  const showloadingEl = () => { loadingEl.current.style.visibility = "visible"; }
-  const hideloadingEl = () => { loadingEl.current.style.visibility = "hidden" }
+  let showloadingEl = () => { loadingEl.current.style.visibility = "visible"; }
+  let hideloadingEl = () => { loadingEl.current.style.visibility = "hidden" }
 
-  const triggerLoadMoreEffect = () => { callSetPaginate(); };
+  let triggerLoadMoreEffect = () => { callSetPaginate(); };
 
-  const canNowLoad = () => {
+  let canNowLoad = () => {
     loadMoreBool.current = { ...loadMoreBool.current, canLoad: true };
   }
 
-  const setLoadingToTrue = () => {
+  let setLoadingToTrue = () => {
     loadMoreBool.current = { ...loadMoreBool.current, loading: true };
   }
 
-  const setLoadingToFalse = () => {
+  let setLoadingToFalse = () => {
     loadMoreBool.current = { ...loadMoreBool.current, loading: false };
   }
 
-  const callSetPaginate = () => { setPaginate(prevBool => !prevBool) };
+  let callSetPaginate = () => { setPaginate(prevBool => !prevBool) };
 
-  const onScrollhandler = () => {
+  let onScrollhandler = () => {
     if (scrolledToBottom() && btnOn.current) {
       toggleScrollBtnOff()
       hideUnreadBtn()
@@ -711,7 +714,7 @@ const ChatComponent = withRouter(function ({ history, cuid_data, contact_details
           if (!old_msgs.empty) {
             hideloadingEl();
             setLoadingToFalse();
-            var reversedDocs = old_msgs.docs.map(doc => doc.data())
+            let reversedDocs = old_msgs.docs.map(doc => doc.data())
             dispatch({ type: "SET_PAGINATED_MESSAGES", payload: reversedDocs.reverse() })
           }
           if (old_msgs.empty) {
@@ -834,29 +837,29 @@ function Input({ cuid_data, auth_user, new_conversation }) {
   let { cuid, type } = cuid_data;
   let counter = 0;
 
-  const autoResizeInput = () => {
+  let autoResizeInput = () => {
     inputEl.current.style.height = elHeightData.contentHeight;
     inputEl.current.style.height = (inputEl.current.scrollHeight - elHeightData.paddingY) + "px";
   }
 
-  const callSetSendVal = () => {
+  let callSetSendVal = () => {
     setSendVal(inputEl.current.value)
     inputEl.current.value = ''
   }
 
-  const handleKeyDown = event => {
+  let handleKeyDown = event => {
     if (event.key === "Enter") {
       event.preventDefault();
       callSetSendVal();
     }
   };
 
-  const handleTextarea = () => {
+  let handleTextarea = () => {
     autoResizeInput();
     setValue(inputEl.current.value);
   }
 
-  const handleClick = () => {
+  let handleClick = () => {
     callSetSendVal()
   }
 
@@ -963,7 +966,7 @@ function Input({ cuid_data, auth_user, new_conversation }) {
   );
 }
 
-function ContactsList({ match }) {
+const ContactsList = ({ history, match }) => {
   const [authUser] = useAuthState();
   const [loading, setLoading] = useState(true);
   const [contactsList, setContactsList] = useState([])
@@ -972,17 +975,15 @@ function ContactsList({ match }) {
     async function getContacts() {
       try {
         const querySnapShotResult = await usersCollection.get();
-
         if (querySnapShotResult.empty) {
-          console.log("sorry your conversation doesnt exsit"); //CreateNewConversation()            
+          console.log("oops no contacts");
+        } else {
+          const allContactsList = querySnapShotResult.docs
+            .map(doc => doc.data())
+            .filter(doc => doc.uid !== authUser.uid);
+          setLoading(false)
+          setContactsList(allContactsList);
         }
-
-        const allContactsList = querySnapShotResult.docs
-          .map(doc => doc.data())
-          .filter(doc => doc.uid !== authUser.uid);
-
-        setLoading(false)
-        setContactsList(allContactsList);
       } catch (error) {
         console.log(error);
       }
@@ -993,33 +994,41 @@ function ContactsList({ match }) {
   useConsole(contactsList);
 
   return (
-    <div className="contacts">
-      {
-        loading ? <div className="load-old-messages-chats"></div>
-          :
-          contactsList.length ? contactsList.map(contact =>
-            <ul>
-              <li key={contact.uid}>
-                <Link to={
-                  {
-                    pathname: `conversations/contactbased`,
-                    contact_details: {
-                      name: contact.name || contact.displayName,
-                      uid: contact.uid,
-                      placeholderColor: contact.placeholderColor,
-                    },
-                  }
-                }>
-                  <div className="img-left">
-                    <h2 className={`rounded ${contact.placeholderColor}`}>{contact.name || contact.displayName.charAt(0)} </h2>
-                  </div>
-                  <b className="name space">{contact.name || contact.displayName}</b>
-                </Link>
-              </li>
-            </ul>)
+    <div className="c-container just-for-mobile">
+      <div className="header-2" onClick={() => history.goBack()}>
+        <div className="header-arrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#FFF" viewBox="0 0 18 18"><path d="M15 8.25H5.87l4.19-4.19L9 3 3 9l6 6 1.06-1.06-4.19-4.19H15v-1.5z" /></svg>
+        </div>
+        <h2 className="header-h2">Contacts</h2>
+      </div>
+      <div className="contacts">
+        {
+          loading ? <div className="load-old-messages-chats"></div>
             :
-            <b>You have no contacts</b>
-      }
+            contactsList.length ? contactsList.map(contact =>
+              <ul>
+                <li key={contact.uid}>
+                  <Link to={
+                    {
+                      pathname: `conversations/contactbased`,
+                      contact_details: {
+                        name: contact.name || contact.displayName,
+                        uid: contact.uid,
+                        placeholderColor: contact.placeholderColor,
+                      },
+                    }
+                  }>
+                    <div className="img-left">
+                      <h2 className={`rounded ${contact.placeholderColor}`}>{contact.name || contact.displayName.charAt(0)} </h2>
+                    </div>
+                    <b className="name space">{contact.name || contact.displayName}</b>
+                  </Link>
+                </li>
+              </ul>)
+              :
+              <b>You have no contacts</b>
+        }
+      </div>
     </div>
   )
 }

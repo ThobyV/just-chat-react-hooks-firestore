@@ -204,14 +204,11 @@ const ChatProvider = ({ children }) => {
                                             first_sender_uid: doc.first_sender_uid,
                                             most_recent_message_snapshot: doc.most_recent_message_snapshot,
                                         };
-                                        //TODO Typing events
-                                        let typing_status_array = Object.values(doc.TYPING_STATUS)
-                                        let { user_one_typing, user_two_typing } = typing_status_array;
-                                        let notTypingEvent = (user_one_typing && user_two_typing) == false
-                                        if (change.type === "added" /*&& notTypingEvent*/) {
+
+                                        if (change.type === "added") {
                                             dispatch({ type: "SET_CONVERSATION_BY_LISTENER", payload: [conversation] })
                                         }
-                                        if (change.type === "modified" /* && notTypingEvent*/) {
+                                        if (change.type === "modified") {
                                             dispatch({ type: "SET_CONVERSATION_BY_LISTENER", payload: [conversation] })
                                         }
                                         dispatch({
