@@ -10,6 +10,20 @@ const setConversationByListener = (payload, conversations) => {
     return convExists ? conversations : [...payload, ...conversations];
 }
 
+const updateConversations = (payload, conversations) => {
+    var { conversation_uid, messages } = payload[0];
+    var convExists = conversations.find(val => val.conversation_uid === conversation_uid);
+    return convExists ? conversations.map(target_conv => {
+        if (target_conv.conversation_uid === conversation_uid) {
+            return {
+                ...target_conv,
+                messages: [...messages]
+            }
+        }
+        return target_conv;
+    }) : conversations
+}
+
 const updateMessage = (payload, conversations) => {
     return conversations.map(conv => {
         if (conv.conversation_uid === payload.channel_id) {
@@ -20,6 +34,18 @@ const updateMessage = (payload, conversations) => {
                 }
                 return _msg;
             })
+        }
+        return conv;
+    })
+}
+
+const updateStaticUnreadCount = (conversation_uid, conversations) => {
+    return conversations.map(conv => {
+        if (conv.conversation_uid === conversation_uid) {
+            return {
+                ...conv,
+                unread_messages_count: 0,
+            }
         }
         return conv;
     })
@@ -92,6 +118,11 @@ const reducer = (state, action) => {
                 ...state,
                 conversations: [...action.payload, ...state.conversations],
             };
+        case "UPDATE_CONVERSATIONS":
+            return {
+                ...state,
+                conversations: updateConversations(action.payload, state.conversations)
+            }
         case "SET_CONVERSATION_BY_LISTENER":
             return {
                 ...state,
@@ -111,12 +142,17 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 conversations: updateMessage(action.payload, state.conversations)
-            }
+            };
         case "UPDATE_CONVERSATION_TYPING_STATUS":
             return {
                 ...state,
                 conversations_by_typingState: updateConvTypingState(action.payload, state.conversations_by_typingState)
-            }
+            };
+        case "CLEAR_STATIC_UNREAD_COUNT":
+            return {
+                ...state,
+                conversations: updateStaticUnreadCount(action.payload, state.conversations)
+            };
         case "INITIALIZE_STATE":
             return {
                 ...state,
@@ -137,6 +173,8 @@ const ChatProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    let findContactDetails = (arr, user_id) => arr.find(obj => obj.uid !== user_id)
+
     useEffect(() => {
         async function getConversations(auth_user_uid) {
             if (authUser.uid) {
@@ -145,7 +183,7 @@ const ChatProvider = ({ children }) => {
                     console.log(auth_user_uid)
                     let conversationsWithUser = await chatsCollection
                         .where("conversation_participants_uid", "array-contains", `${auth_user_uid}`)
-                        .limit(5)
+                        .limit(15)
                         .get();
 
                     if (conversationsWithUser.empty) {
@@ -153,6 +191,15 @@ const ChatProvider = ({ children }) => {
                     }
                     let conversationsBucket = [];
                     conversationsWithUser.docs.forEach(async doc => {
+                        let contactDetails = findContactDetails(doc.data().conversation_participants_details, auth_user_uid);
+                        let unread_messages_count = await chatsCollection
+                            .doc(doc.id)
+                            .collection("messages")
+                            .where("read", "==", false)
+                            .where("sender_uid", "==", `${contactDetails.uid}`)
+                            .get();
+
+                        console.log(unread_messages_count)
                         conversationsBucket.push({
                             conversation_uid: doc.id,
                             conversation_participants_uid: doc.data().conversation_participants_uid,
@@ -163,6 +210,7 @@ const ChatProvider = ({ children }) => {
                             createdAt: doc.data().createdAt,
                             most_recent_message_snapshot: doc.data().most_recent_message_snapshot,
                             TYPING_STATUS: doc.data().TYPING_STATUS,
+                            unread_messages_count: unread_messages_count.docs.length,
                         });
                         if (conversationsBucket.length === conversationsWithUser.docs.length) {
                             setLoading(false);

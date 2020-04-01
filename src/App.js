@@ -215,8 +215,8 @@ const LoadConversations = ({ match }) => {
 const LcComponent = React.memo(function ({ match, authUser, conversations, dispatch, loading }) {
   const [selected, setSelected] = useState({});
 
-  const findContactDetails = (arr, user_id) => arr.find(obj => obj.uid !== user_id)
-  const setLastMessage = messages => messages[messages.length - 1];
+  let findContactDetails = (arr, user_id) => arr.find(obj => obj.uid !== user_id)
+  let setLastMessage = messages => messages[messages.length - 1];
   let setSelectedClass = (key_uid) => {
     setSelected({ key: key_uid })
   }
@@ -258,7 +258,8 @@ const LcComponent = React.memo(function ({ match, authUser, conversations, dispa
                 conversations.map((_conversation) => {
                   let contactDetails = findContactDetails(_conversation.conversation_participants_details, authUser.uid);
                   let lastMessage = getLastMessage(_conversation)
-                  let unreadMessages = () => _conversation.messages.filter(msg => msg.read === false && msg.sender_uid !== authUser.uid);
+                  //always reads as false when conversations are first loaded because no messages on client yet
+                  let unreadMessages = () => _conversation.messages.filter(msg => msg.read === false && msg.sender_uid !== authUser.uid)
                   let MessageReadReciepts = () => lastMessage.sender_uid === authUser.uid ? <ReadReciepts message_read={lastMessage.read_state} /> : null
 
                   return (
@@ -297,13 +298,12 @@ const LcComponent = React.memo(function ({ match, authUser, conversations, dispa
                       {
                         _conversation.first_message &&
                           _conversation.first_sender_uid !== authUser.uid &&
-                          !_conversation.messages.length ?
-                          <div className="label">new</div>
-                          :
-                          unreadMessages().length ?
-                            <div className="badge">{unreadMessages().length}</div>
-                            :
-                            null
+                          !_conversation.messages.length ? (<div className="label">new</div>)
+                          : _conversation.unread_messages_count &&
+                            !_conversation.messages.length ? (<div className="badge">{_conversation.unread_messages_count}</div>)
+                            : unreadMessages().length ?
+                              <div className="badge">{unreadMessages().length + _conversation.unread_messages_count}</div>
+                              : null
                       }
                     </li>
                   )
@@ -363,13 +363,15 @@ const SetConversation = ({ match, location }) => {
       conversation_uid: convDocValue.id,
       conversation_participants_uid: convDocValue.data().conversation_participants_uid,
       conversation_participants_details: convDocValue.data().conversation_participants_details,
-      messages: messagesList.docs.map(doc => ({ ...doc.data(), message_id: doc.id })),
+      messages: messagesList.docs.map(doc => ({ ...doc.data(), message_id: doc.id })).reverse(),
       timestamp: convDocValue.data().timestamp,
+      most_recent_message_snapshot: convDocValue.data().most_recent_message_snapshot,      
+      unread_messages_count: 0,            
     });
 
     if (conversation.length) {
       dispatch({
-        type: "SET_CONVERSATIONS",
+        type: "UPDATE_CONVERSATIONS",
         payload: conversation
       });
       updateCuidData(convDocValue.id, null)
@@ -469,7 +471,8 @@ const SetConversation = ({ match, location }) => {
       TYPING_STATUS: {
         [authUser.uid]: false,
         [contact_details.uid]: false
-      }
+      },
+      unread_messages_count: 0,      
     }
     setNewConversation(conversation_data);
     updateCuidData(cuid, 'NEW_CONVERSATION');
@@ -702,7 +705,7 @@ const ChatComponent = withRouter(function ({ history, cuid_data, contact_details
       let canLoad = loadMoreBool.current.canLoad
       if (canLoad) {
         try {
-          setLoadingToTrue()
+          setLoadingToTrue();
           const old_msgs = await chatsCollection
             .doc(cuid_data.cuid)
             .collection("messages")
@@ -714,8 +717,8 @@ const ChatComponent = withRouter(function ({ history, cuid_data, contact_details
           if (!old_msgs.empty) {
             hideloadingEl();
             setLoadingToFalse();
-            let reversedDocs = old_msgs.docs.map(doc => doc.data())
-            dispatch({ type: "SET_PAGINATED_MESSAGES", payload: reversedDocs.reverse() })
+            let reversedMessages = old_msgs.docs.map(doc => doc.data())
+            dispatch({ type: "SET_PAGINATED_MESSAGES", payload: reversedMessages.reverse() })
           }
           if (old_msgs.empty) {
             setLoadingToFalse()
@@ -733,6 +736,7 @@ const ChatComponent = withRouter(function ({ history, cuid_data, contact_details
   useEffect(() => {
     if (hasKey(conversation, "messages")) {
       if (conversation.messages.length) {
+        dispatch({ type: "CLEAR_STATIC_UNREAD_COUNT", payload: conversation.conversation_uid });
         let unread = messages.filter(msg => msg.read === false && msg.sender_uid !== auth_user.uid);
         if (unread.length) {
           if (!scrolledToBottom()) {
