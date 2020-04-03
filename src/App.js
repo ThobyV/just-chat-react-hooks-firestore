@@ -365,8 +365,8 @@ const SetConversation = ({ match, location }) => {
       conversation_participants_details: convDocValue.data().conversation_participants_details,
       messages: messagesList.docs.map(doc => ({ ...doc.data(), message_id: doc.id })).reverse(),
       timestamp: convDocValue.data().timestamp,
-      most_recent_message_snapshot: convDocValue.data().most_recent_message_snapshot,      
-      unread_messages_count: 0,            
+      most_recent_message_snapshot: convDocValue.data().most_recent_message_snapshot,
+      unread_messages_count: 0,
     });
 
     if (conversation.length) {
@@ -472,7 +472,7 @@ const SetConversation = ({ match, location }) => {
         [authUser.uid]: false,
         [contact_details.uid]: false
       },
-      unread_messages_count: 0,      
+      unread_messages_count: 0,
     }
     setNewConversation(conversation_data);
     updateCuidData(cuid, 'NEW_CONVERSATION');
